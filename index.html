@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Julián Sierra Salamanca — CV Quantum Parallax</title>
   <meta name="description" content="Hoja de vida interactiva con estética física cuántica: Three.js + GSAP ScrollTrigger + Mandelbrot" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -15,7 +15,10 @@
       --muted:rgba(230,238,246,0.78);
       --glass: rgba(255,255,255,0.03);
       --white:#ffffff;
+      --max-width:1100px;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
     *{box-sizing:border-box}
     html,body,#app{height:100%}
@@ -26,31 +29,43 @@
         radial-gradient(800px 400px at 90% 80%, rgba(68,255,214,0.03), transparent 8%),
         linear-gradient(180deg,var(--bg), #00101a 140%);
       color:var(--white);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
       overflow-x:hidden;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -ms-touch-action: manipulation;
     }
 
-    .container{max-width:1100px;margin:0 auto;padding:36px 20px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{display:flex;align-items:center;gap:16px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#001219}
-    h1{font-size:22px;margin:0}
-    small{display:block;color:var(--muted);font-weight:500}
+    /* Layout */
+    .container{max-width:var(--max-width);margin:0 auto;padding:30px 18px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#001219}
+    h1{font-size:20px;margin:0}
+    small{display:block;color:var(--muted);font-weight:500;font-size:13px}
 
-    nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:14px}
+    nav a{color:var(--muted);text-decoration:none;margin-left:12px;font-size:13px}
 
-    section{padding:96px 0;position:relative}
-    .hero{min-height:88vh;display:flex;align-items:center}
-    .hero-grid{display:grid;grid-template-columns:1fr 460px;gap:36px;align-items:center}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.6);backdrop-filter: blur(6px)}
+    section{padding:64px 0;position:relative}
+    .hero{min-height:78vh;display:flex;align-items:center}
+    .hero-grid{display:grid;grid-template-columns:1fr 460px;gap:28px;align-items:center}
 
-    .three-viewport{position:relative;width:100%;height:360px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(2,10,20,0.6), rgba(0,8,16,0.4));}
-    canvas{display:block;width:100%;height:100%}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:18px;border-radius:12px;
+      box-shadow:0 8px 36px rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .three-viewport{
+      position:relative;width:100%;height:360px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);
+      background:linear-gradient(180deg, rgba(2,10,20,0.6), rgba(0,8,16,0.4));
+    }
+    canvas{display:block;width:100%;height:100%;object-fit:cover}
 
     .parallax-dots{position:absolute;inset:0;background-image:radial-gradient(circle, rgba(255,255,255,0.02) 0.6px, transparent 0.8px);background-size:28px 28px;opacity:0.06;pointer-events:none}
 
-    .lead{color:var(--muted);margin:8px 0 14px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:15px}
     .meta{display:flex;flex-direction:column;gap:6px}
     .contact{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
     .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
@@ -60,13 +75,55 @@
     .quantum-btn{position:relative;overflow:hidden}
     .quantum-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(68,255,214,0.18), transparent 18%);opacity:0;transition:opacity .35s ease}
 
-    .cv-text{white-space:pre-wrap;color:var(--muted);line-height:1.5}
+    .cv-text{white-space:pre-wrap;color:var(--muted);line-height:1.5;font-size:14px}
 
-    footer{padding:40px 0;text-align:center;color:var(--muted)}
+    footer{padding:36px 0;text-align:center;color:var(--muted);font-size:14px}
 
+    /* Responsive adjustments */
+    @media (max-width:1100px){
+      .hero-grid{grid-template-columns:1fr 420px;gap:20px}
+    }
     @media (max-width:980px){
-      .hero-grid{grid-template-columns:1fr}
+      .container{padding:26px 16px}
+      .hero-grid{grid-template-columns:1fr;gap:18px}
       .three-viewport{height:300px}
+      header{padding-bottom:8px}
+      h1{font-size:18px}
+      .lead{font-size:14px}
+    }
+    @media (max-width:640px){
+      :root{--max-width:720px}
+      .container{padding:20px 14px}
+      .logo{width:48px;height:48px}
+      h1{font-size:16px}
+      small{font-size:12px}
+      .hero{min-height:60vh}
+      .three-viewport{height:220px;border-radius:10px}
+      .card{padding:14px}
+      .lead{font-size:13px}
+      .cv-text{font-size:13px}
+      nav a{display:none} /* hide nav links for compact header; you can add a hamburger later */
+      .contact{font-size:13px}
+      .tags{gap:6px}
+      .btn{flex:1;padding:10px;border-radius:10px}
+      /* make CTAs full width on mobile */
+      .hero .card > div:last-child{display:flex;flex-direction:column;gap:10px}
+      .hero .card .btn{width:100%}
+    }
+    @media (max-width:420px){
+      .three-viewport{height:180px}
+      .logo{width:44px;height:44px}
+      .container{padding:16px 12px}
+      .card{padding:12px}
+      .cv-text{font-size:12px}
+      .tag{font-size:12px;padding:5px 8px}
+      /* Optionally hide 3D on very small screens for best readability/performance */
+      .three-viewport[data-hide-on-small="true"]{display:none}
+    }
+
+    /* Respect user reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
     }
 
     /* Ensure main content is above the canvas visualization */
@@ -85,7 +142,7 @@
             <small>Estudiante de maestría en matemáticas aplicadas · Ingeniero físico</small>
           </div>
         </div>
-        <nav>
+        <nav aria-hidden="true">
           <a href="#about">Sobre mí</a>
           <a href="#experience">Experiencia</a>
           <a href="#projects">Proyectos</a>
@@ -104,9 +161,9 @@
                 <div class="contact">
                   <span>✉️ julianssvr@gmail.com</span>
                   <span>📱 317-640-6113</span>
-                  <span>🔗 <a href="https://github.com/Emmaquantum" target="_blank" rel="noopener" style="color:var(--muted)">github.com/Emmaquantum</a></span>
+                  <span>🔗 <a href="https://github.com/Emmaquantum" target="_blank" rel="noopener noreferrer" style="color:var(--muted)">github.com/Emmaquantum</a></span>
                 </div>
-                <div class="tags">
+                <div class="tags" aria-hidden>
                   <span class="tag">Python</span>
                   <span class="tag">Matlab</span>
                   <span class="tag">Machine Learning</span>
@@ -115,25 +172,24 @@
                 </div>
               </div>
 
-              <div style="margin-top:18px;display:flex;gap:12px">
+              <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
                 <div class="quantum-btn" id="downloadWrap" style="flex-shrink:0">
-                  <button id="downloadBtn" class="btn">Descargar CV (PDF)</button>
+                  <button id="downloadBtn" class="btn" aria-label="Descargar CV en PDF">Descargar CV (PDF)</button>
                   <div class="quantum-glow" id="downloadGlow"></div>
                 </div>
-                <button id="contactBtn" class="btn">Contactar</button>
+                <button id="contactBtn" class="btn" aria-label="Contactar">Contactar</button>
               </div>
 
             </div>
 
-            <!-- THIS CARD CONTAINS the threeWrap where the 3D figure will render -->
-            <div class="card" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px);">
-              <div class="three-viewport" id="threeWrap">
-                <!-- Three.js canvas target -->
-                <canvas id="threeCanvas" data-engine="three.js r152"></canvas>
-                <div class="parallax-dots"></div>
+            <!-- Card with 3D viewport (will hide on very small screens) -->
+            <div class="card" style="transform:none;">
+              <div class="three-viewport" id="threeWrap" data-hide-on-small="true" aria-hidden="true">
+                <canvas id="threeCanvas" data-engine="three.js r152" role="img" aria-label="Visualización 3D"></canvas>
+                <div class="parallax-dots" aria-hidden="true"></div>
                 <div id="threeOverlay" style="position:absolute;inset:0;pointer-events:none"></div>
               </div>
-              <p style="margin-top:12px;color:var(--muted);font-size:13px"> Superficie Toroide (T² en ℝ³) </p>
+              <p style="margin-top:12px;color:var(--muted);font-size:13px">Superficie Toroide (T² en ℝ³)</p>
             </div>
 
           </div>
@@ -143,8 +199,8 @@
         <section id="about">
           <div class="card">
             <h3 class="section-title">Formación académica</h3>
-            <div class="row" style="display:flex;gap:18px">
-              <div class="col" style="flex:1">
+            <div class="row" style="display:flex;gap:18px;flex-wrap:wrap">
+              <div class="col" style="flex:1;min-width:240px">
                 <h4>Estudiante de maestría en matemáticas aplicadas</h4>
                 <p class="cv-text">Universidad Nacional de Colombia.
 Febrero, 2025 - Actualmente.</p>
@@ -153,7 +209,7 @@ Febrero, 2025 - Actualmente.</p>
                 <p class="cv-text">Universidad Nacional de Colombia.
 Junio, 2015 - Noviembre, 2022.</p>
               </div>
-              <div class="col" style="flex:1">
+              <div class="col" style="flex:1;min-width:240px">
                 <h4>Habilidades</h4>
                 <div class="tags" style="margin-top:6px">
                   <span class="tag">Python</span>
@@ -242,10 +298,15 @@ Logros:
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+  <!-- Modern three import as module; expose THREE on window so initializer can use it -->
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.152.2/build/three.module.js';
+    window.THREE = THREE;
+  </script>
 
-
+  <!-- Robust initializer: detects WebGL, runs Three.js or Canvas2D fallback (includes Simplex inline) -->
   <script>
-/* ===== SimplexNoise compact inline (evita CDN con problemas de MIME) ===== */
+/* ===== SimplexNoise compact inline (evita CDN) ===== */
 class SimplexNoiseInline {
   constructor(r){ r = r || Math.random; this.p = new Uint8Array(256); for (let i=0;i<256;i++) this.p[i]=i; for (let i=255;i>0;i--){ const j=Math.floor(r()*(i+1)); [this.p[i],this.p[j]]=[this.p[j],this.p[i]]; } }
   dot(g,x,y){ return g[0]*x + g[1]*y; }
@@ -273,7 +334,7 @@ class SimplexNoiseInline {
   noise3D(){ return this.noise2D(arguments[0], arguments[1] || 0); }
 }
 
-/* ===== Detect WebGL availability ===== */
+/* ===== WebGL detection ===== */
 function detectWebGL(){
   try {
     const c = document.createElement('canvas');
@@ -281,7 +342,7 @@ function detectWebGL(){
   } catch(e){ return false; }
 }
 
-/* ===== Main initializer: Three.js if posible, otherwise Canvas2D fallback ===== */
+/* ===== Main initializer (Three.js or Canvas2D fallback) ===== */
 (function(){
   const panel = document.getElementById('threeWrap');
   const canvas = document.getElementById('threeCanvas');
@@ -290,7 +351,7 @@ function detectWebGL(){
   const noise = new SimplexNoiseInline();
   const state = { hue:0.55, rotX:0, rotY:0, wobble:0 };
 
-  // mapear scroll global a estado (usa GSAP si está disponible)
+  // Map scroll to state (GSAP ScrollTrigger)
   const proxy = { p:0 };
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined'){
     gsap.registerPlugin(ScrollTrigger);
@@ -301,9 +362,12 @@ function detectWebGL(){
     });
   }
 
+  // Optionally hide heavy 3D on very small screens (attribute on element controls visibility)
+  const hideOnSmall = panel.dataset.hideOnSmall === "true" && window.matchMedia('(max-width:420px)').matches;
+  if (hideOnSmall) { panel.style.display = 'none'; return; }
+
   const webglAvailable = detectWebGL() && typeof THREE !== 'undefined';
   if (webglAvailable) {
-    // ===== THREE.JS path =====
     try {
       const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -313,32 +377,33 @@ function detectWebGL(){
       scene.add(new THREE.AmbientLight(0xffffff, 0.6));
       const dl = new THREE.DirectionalLight(0xffffff, 0.9); dl.position.set(3,3,5); scene.add(dl);
 
-      // icosahedron
-      const detail = window.innerWidth < 980 ? 3 : 5;
+      // geometry (reducción de detalle en móviles)
+      const detail = window.innerWidth < 640 ? 2 : (window.innerWidth < 980 ? 3 : 5);
       const geo = new THREE.IcosahedronGeometry(1.05, detail);
       const basePos = new Float32Array(geo.attributes.position.array);
       const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color().setHSL(0.6,0.78,0.52), metalness:0.25, roughness:0.35, emissive:0x001b1b });
       const mesh = new THREE.Mesh(geo, mat); scene.add(mesh);
 
-      // mandelbrot plane
+      // mandelbrot background plane (shader simple)
       const mandelUniforms = { u_time:{value:0}, u_zoom:{value:1.8}, u_offset:{value:new THREE.Vector2(-0.5,0)}, u_aspect:{value:1} };
       const mandelVS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }';
       const mandelFS = 'precision highp float; varying vec2 vUv; uniform float u_time; uniform float u_zoom; uniform vec2 u_offset; uniform float u_aspect; vec3 palette(float t){ return vec3(0.5+0.5*cos(6.2831*(t+vec3(0.0,0.33,0.67)))); } void main(){ vec2 uv=vUv-0.5; uv.x *= u_aspect; vec2 c = uv * u_zoom + u_offset; vec2 z = c; int it=0; for(int i=0;i<120;i++){ float x = (z.x*z.x - z.y*z.y) + c.x; float y = (2.0*z.x*z.y) + c.y; z = vec2(x,y); if(dot(z,z) > 16.0){ it=i; break; } } float t = float(it)/120.0; vec3 col = palette(t); gl_FragColor = vec4(col,1.0); }';
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(4,2.4,1,1), new THREE.ShaderMaterial({ uniforms:mandelUniforms, vertexShader:mandelVS, fragmentShader:mandelFS, transparent:true, opacity:0.95 }));
       plane.position.set(0,0,-1.6); scene.add(plane);
 
-      // ring
       const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6,0.02,12,120), new THREE.MeshBasicMaterial({ color:0xffffff, opacity:0.035, transparent:true })); ring.rotation.x = Math.PI*0.35; scene.add(ring);
 
       // resize handling
       function resizeThree(){
         const r = panel.getBoundingClientRect();
         const w = Math.max(100, Math.floor(r.width)), h = Math.max(100, Math.floor(r.height));
-        renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); mandelUniforms.u_aspect.value = w/h;
+        renderer.setSize(w, h, false);
+        camera.aspect = w/h; camera.updateProjectionMatrix();
+        mandelUniforms.u_aspect.value = w/h;
       }
       const ro = new ResizeObserver(resizeThree); ro.observe(panel); resizeThree();
 
-      // animate
+      // animation loop
       const clock = new THREE.Clock();
       function animateThree(){
         const t = clock.getElapsedTime();
@@ -369,12 +434,11 @@ function detectWebGL(){
 
       return;
     } catch(e){
-      console.warn('Error inicializando Three.js; se intentará fallback Canvas2D', e);
-      // continúa y caerá al fallback
+      console.warn('Error inicializando Three.js; fallback Canvas2D', e);
     }
   }
 
-  // ===== Canvas2D fallback (cuando WebGL no está disponible) =====
+  // Canvas2D fallback (si WebGL no disponible)
   (function(){
     const ctx = canvas.getContext('2d');
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -393,11 +457,10 @@ function detectWebGL(){
       ctx.clearRect(0,0,w,h);
       ctx.fillStyle = 'rgba(0,6,16,0.06)'; ctx.fillRect(0,0,w,h);
       const hue = (state.hue % 1) * 360;
-      // radial glow
       const g = ctx.createRadialGradient(w*0.5,h*0.5,20,w*0.5,h*0.5,Math.max(w,h)*0.9);
       g.addColorStop(0, `hsla(${hue},80%,60%,0.25)`); g.addColorStop(0.4, `hsla(${(hue+60)%360},70%,45%,0.12)`); g.addColorStop(1, `rgba(0,0,0,0)`);
       ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-      // noisy blob outline
+
       ctx.save(); ctx.translate(w*0.5,h*0.5);
       const radius = Math.min(w,h)*0.24*(1 + 0.06*Math.sin(t*0.9));
       ctx.beginPath();
@@ -413,195 +476,47 @@ function detectWebGL(){
       ctx.closePath();
       ctx.lineWidth = 2; ctx.strokeStyle = `hsla(${hue},85%,60%,0.9)`; ctx.shadowBlur=18; ctx.shadowColor = `hsla(${hue},85%,60%,0.55)`; ctx.stroke(); ctx.shadowBlur=0;
       ctx.restore();
-      // rings
+
       ctx.save(); ctx.translate(w*0.5,h*0.5); ctx.rotate(t*0.14 + state.rotY*0.8); ctx.globalAlpha = 0.12;
       ctx.beginPath(); ctx.arc(0,0, radius*1.9, 0, Math.PI*2); ctx.lineWidth=3; ctx.strokeStyle = `hsla(${(hue+40)%360},70%,55%,0.6)`; ctx.stroke(); ctx.restore();
+
       requestAnimationFrame(draw);
     }
     draw();
     window.addEventListener('unload', ()=>{ ro2.disconnect(); });
   })();
 
-})(); // end main IIFE
-</script>
-
- 
-
-  <script>
-    // ------------------ GSAP init ------------------
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.from('#introCard',{y:36,opacity:0,duration:1.0,ease:'power3.out'});
-    document.querySelectorAll('section').forEach((sec)=>{
-      gsap.from(sec.querySelectorAll('.card, h3, h4, p'),{y:30,opacity:0,duration:0.8,stagger:0.06,scrollTrigger:{trigger:sec,start:'top 85%'}});
-    });
-
-    // Button glow interaction
-    const downloadWrap = document.getElementById('downloadWrap');
-    const glow = document.getElementById('downloadGlow');
-    downloadWrap.addEventListener('mousemove', (e)=>{
-      const r = downloadWrap.getBoundingClientRect();
-      const x = ((e.clientX - r.left)/r.width)*100;
-      const y = ((e.clientY - r.top)/r.height)*100;
-      glow.style.setProperty('--x', x + '%');
-      glow.style.setProperty('--y', y + '%');
-      glow.style.opacity = 1;
-    });
-    downloadWrap.addEventListener('mouseleave', ()=>{glow.style.opacity = 0});
-    downloadWrap.addEventListener('mouseenter', ()=>{gsap.fromTo(downloadWrap,{scale:1},{scale:1.02,duration:0.6,repeat:1,yoyo:true,ease:'power1.inOut'})});
-    document.getElementById('contactBtn').addEventListener('click', ()=>{gsap.fromTo('#contactBtn',{y:-6},{y:0,duration:0.8,ease:'bounce.out'}); alert('Email: julianssvr@gmail.com — Tel: 317-640-6113');});
-
-    // ------------------ Three.js scene inside threeWrap ------------------
-    (function(){
-      const panel = document.getElementById('threeWrap');
-      const canvas = document.getElementById('threeCanvas');
-
-      // Renderer
-      const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setClearColor(0x000000, 0); // transparent background
-
-      // Scene + Camera
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 100);
-      camera.position.set(0,0,3.6);
-
-      // Lights
-      const amb = new THREE.AmbientLight(0xffffff, 0.6); scene.add(amb);
-      const dir = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,3,5); scene.add(dir);
-
-      // Geometry and material
-      const detail = window.innerWidth < 980 ? 3 : 5;
-      const geo = new THREE.IcosahedronGeometry(1.05, detail);
-      const basePos = new Float32Array(geo.attributes.position.array);
-
-      const mat = new THREE.MeshStandardMaterial({
-        color: new THREE.Color().setHSL(0.6, 0.78, 0.52),
-        metalness: 0.25,
-        roughness: 0.35,
-        emissive: new THREE.Color(0x001b1b)
-      });
-
-      const mesh = new THREE.Mesh(geo, mat);
-      scene.add(mesh);
-
-      // Mandelbrot background plane (low cost shader)
-      const mandelUniforms = { u_time:{value:0}, u_zoom:{value:1.8}, u_offset:{value:new THREE.Vector2(-0.5,0)}, u_aspect:{value:1} };
-      const mandelVS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);}';
-      const mandelFS = `
-        precision highp float;
-        varying vec2 vUv;
-        uniform float u_time;
-        uniform float u_zoom;
-        uniform vec2 u_offset;
-        uniform float u_aspect;
-        vec3 palette(float t){ return vec3(0.5+0.5*cos(6.2831*(t+vec3(0.0,0.33,0.67)))); }
-        void main(){
-          vec2 uv = vUv - 0.5;
-          uv.x *= u_aspect;
-          vec2 c = uv * u_zoom + u_offset;
-          vec2 z = c;
-          int it = 0;
-          int maxI = 120;
-          for(int i=0;i<120;i++){
-            float x = (z.x*z.x - z.y*z.y) + c.x;
-            float y = (2.0*z.x*z.y) + c.y;
-            z = vec2(x,y);
-            if(dot(z,z) > 16.0){ it = i; break; }
-          }
-          float t = float(it)/float(maxI);
-          vec3 col = palette(t);
-          gl_FragColor = vec4(col, 1.0);
-        }
-      `;
-      const plane = new THREE.Mesh(new THREE.PlaneGeometry(4,2.4,1,1), new THREE.ShaderMaterial({uniforms:mandelUniforms,vertexShader:mandelVS,fragmentShader:mandelFS,transparent:true,opacity:0.95}));
-      plane.position.set(0,0,-1.6);
-      scene.add(plane);
-
-      // Ring subtle
-      const ringGeo = new THREE.TorusGeometry(1.6, 0.02, 12, 120);
-      const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({color:0xffffff, opacity:0.035, transparent:true}));
-      ring.rotation.x = Math.PI*0.35;
-      scene.add(ring);
-
-      // Noise
-      const simplex = new SimplexNoise();
-
-      // State mapped by scroll
-      const state = { hue: 0.55, rotX: 0, rotY: 0, wobble: 0.0 };
-
-      // Resize handling
-      function resize(){
-        const rect = panel.getBoundingClientRect();
-        const w = Math.max(100, Math.floor(rect.width));
-        const h = Math.max(100, Math.floor(rect.height));
-        renderer.setSize(w, h, false);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        mandelUniforms.u_aspect.value = w / h;
-      }
-      const ro = new ResizeObserver(resize); ro.observe(panel); resize();
-
-      // Animation loop
-      const clock = new THREE.Clock();
-      function animate(){
-        const t = clock.getElapsedTime();
-        mandelUniforms.u_time.value = t;
-
-        // deform geometry with 3D noise
-        const pos = geo.attributes.position;
-        for(let i=0;i<pos.count;i++){
-          const ix = i*3;
-          const bx = basePos[ix], by = basePos[ix+1], bz = basePos[ix+2];
-          // 3D simplex-like using the library
-          const n = simplex.noise3D(bx*1.4 + t*0.6, by*1.2 + t*0.7, bz*1.1 + t*0.5);
-          const disp = n * 0.06 * (1 + state.wobble);
-          pos.array[ix]   = bx + disp * (0.9 - Math.abs(by));
-          pos.array[ix+1] = by + disp * (0.9 - Math.abs(bx));
-          pos.array[ix+2] = bz + disp * 0.9;
-        }
-        pos.needsUpdate = true;
-
-        // rotation influenced by state + slight idle motion
-        mesh.rotation.x = 0.15 * Math.sin(t*0.6) + state.rotX;
-        mesh.rotation.y += 0.004 + state.rotY * 0.01;
-
-        // apply hue
-        mat.color.setHSL(state.hue % 1, 0.78, 0.52);
-
-        renderer.render(scene, camera);
-        requestAnimationFrame(animate);
-      }
-      animate();
-
-      // GSAP ScrollTrigger: map scroll progress to color/rotation/wobble
-      const proxy = { p: 0 };
-      gsap.to(proxy, {
-        p: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: document.body,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 0.7
-        },
-        onUpdate: () => {
-          const prog = proxy.p;
-          const hue = 0.05 + prog * 0.85; // rainbow sweep
-          const rx = Math.sin(prog * Math.PI * 2) * 0.12;
-          const ry = Math.cos(prog * Math.PI * 1.7) * 0.18;
-          const wob = Math.abs(Math.sin(prog * Math.PI * 2)) * 0.9;
-          gsap.to(state, { hue: hue, rotX: rx, rotY: ry, wobble: wob, duration: 0.6, ease: 'power2.out' });
-        }
-      });
-
-      // subtle panel micro-parallax
-      gsap.to('#threeWrap', { y: -20, scrollTrigger:{ trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 } });
-
-      // cleanup for SPA
-      window.addEventListener('unload', ()=>{ ro.disconnect(); });
-
-    })();
-
+})(); // end initializer
   </script>
+
+  <!-- GSAP micro animations (kept small & respects reduced-motion) -->
+  <script>
+    (function(){
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.from('#introCard',{y:24,opacity:0,duration:0.9,ease:'power3.out'});
+      document.querySelectorAll('section').forEach((sec)=>{
+        gsap.from(sec.querySelectorAll('.card, h3, h4, p'),{y:20,opacity:0,duration:0.75,stagger:0.05,scrollTrigger:{trigger:sec,start:'top 85%'}});
+      });
+
+      const downloadWrap = document.getElementById('downloadWrap');
+      const glow = document.getElementById('downloadGlow');
+      if (downloadWrap){
+        downloadWrap.addEventListener('mousemove', (e)=>{
+          const r = downloadWrap.getBoundingClientRect();
+          const x = ((e.clientX - r.left)/r.width)*100;
+          const y = ((e.clientY - r.top)/r.height)*100;
+          glow.style.setProperty('--x', x + '%');
+          glow.style.setProperty('--y', y + '%');
+          glow.style.opacity = 1;
+        });
+        downloadWrap.addEventListener('mouseleave', ()=>{glow.style.opacity = 0});
+        downloadWrap.addEventListener('mouseenter', ()=>{gsap.fromTo(downloadWrap,{scale:1},{scale:1.02,duration:0.5,repeat:1,yoyo:true,ease:'power1.inOut'})});
+      }
+      const contactBtn = document.getElementById('contactBtn');
+      if (contactBtn) contactBtn.addEventListener('click', ()=>{ gsap.fromTo('#contactBtn',{y:-6},{y:0,duration:0.6,ease:'bounce.out'}); alert('Email: julianssvr@gmail.com — Tel: 317-640-6113'); });
+    })();
+  </script>
+
 </body>
 </html>
