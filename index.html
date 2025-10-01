@@ -489,6 +489,62 @@ function detectWebGL(){
 })(); // end initializer
   </script>
 
+
+
+
+<script>
+  (function(){
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (!downloadBtn) return;
+    const rawUrl = 'https://raw.githubusercontent.com/sergiogonza/julicv/main/GCV___Juli%C3%A1n_Sierra_Salamanca.pdf';
+    const filename = 'GCV_Julian_Sierra_Salamanca.pdf';
+
+    async function downloadPDF(){
+      try {
+        downloadBtn.disabled = true;
+        const origText = downloadBtn.textContent;
+        downloadBtn.textContent = 'Descargando...';
+
+        const resp = await fetch(rawUrl);
+        if (!resp.ok) throw new Error('Error al obtener el PDF: ' + resp.status);
+
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // liberar memoria
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+
+        downloadBtn.textContent = 'Listo ✓';
+        setTimeout(()=> downloadBtn.textContent = origText, 1400);
+      } catch (err) {
+        console.error(err);
+        alert('No se pudo descargar el PDF automáticamente. Se abrirá en una nueva pestaña.');
+        // Fallback: abrir raw URL en nueva pestaña para que el usuario pueda guardarlo
+        window.open(rawUrl, '_blank', 'noopener');
+      } finally {
+        downloadBtn.disabled = false;
+      }
+    }
+
+    downloadBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      downloadPDF();
+    });
+  })();
+</script>
+
+  
+
+
+
+  
   <!-- GSAP micro animations (kept small & respects reduced-motion) -->
   <script>
     (function(){
