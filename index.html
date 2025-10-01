@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Julián Sierra Salamanca — CV Quantum Parallax</title>
+  <meta name="description" content="Hoja de vida interactiva con estética física cuántica: Three.js + GSAP ScrollTrigger + Mandelbrot" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#021029;
+      --card:#062034;
+      --accent:#44ffd6;
+      --accent-2:#6b7bff;
+      --muted:rgba(230,238,246,0.78);
+      --glass: rgba(255,255,255,0.03);
+      --white:#ffffff;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body,#app{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(107,123,255,0.05), transparent 10%),
+        radial-gradient(800px 400px at 90% 80%, rgba(68,255,214,0.03), transparent 8%),
+        linear-gradient(180deg,var(--bg), #00101a 140%);
+      color:var(--white);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+
+    .container{max-width:1100px;margin:0 auto;padding:36px 20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:16px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#001219}
+    h1{font-size:22px;margin:0}
+    small{display:block;color:var(--muted);font-weight:500}
+
+    nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:14px}
+
+    section{padding:96px 0;position:relative}
+    .hero{min-height:88vh;display:flex;align-items:center}
+    .hero-grid{display:grid;grid-template-columns:1fr 460px;gap:36px;align-items:center}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.6);backdrop-filter: blur(6px)}
+
+    .three-viewport{position:relative;width:100%;height:360px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(2,10,20,0.6), rgba(0,8,16,0.4));}
+    canvas{display:block;width:100%;height:100%}
+
+    .parallax-dots{position:absolute;inset:0;background-image:radial-gradient(circle, rgba(255,255,255,0.02) 0.6px, transparent 0.8px);background-size:28px 28px;opacity:0.06;pointer-events:none}
+
+    .lead{color:var(--muted);margin:8px 0 14px}
+    .meta{display:flex;flex-direction:column;gap:6px}
+    .contact{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .tag{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+
+    .btn{appearance:none;border:none;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001219;box-shadow:0 6px 18px rgba(43,58,82,0.6);transform:translateZ(0);}
+    .quantum-btn{position:relative;overflow:hidden}
+    .quantum-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(68,255,214,0.18), transparent 18%);opacity:0;transition:opacity .35s ease}
+
+    .cv-text{white-space:pre-wrap;color:var(--muted);line-height:1.5}
+
+    footer{padding:40px 0;text-align:center;color:var(--muted)}
+
+    @media (max-width:980px){
+      .hero-grid{grid-template-columns:1fr}
+      .three-viewport{height:300px}
+    }
+
+    /* Ensure main content is above the canvas visualization */
+    #app, .container { position: relative; z-index: 2; }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo">JS</div>
+          <div>
+            <h1>Julián Sierra Salamanca</h1>
+            <small>Estudiante de maestría en matemáticas aplicadas · Ingeniero físico</small>
+          </div>
+        </div>
+        <nav>
+          <a href="#about">Sobre mí</a>
+          <a href="#experience">Experiencia</a>
+          <a href="#projects">Proyectos</a>
+        </nav>
+      </header>
+
+      <main>
+        <!-- HERO -->
+        <section class="hero" id="top">
+          <div class="hero-grid">
+            <div class="card" id="introCard">
+              <h2 style="margin-top:0">Perfil profesional</h2>
+              <p class="lead">Estudiante de maestría en matemáticas aplicadas e ingeniero físico con enfoque en análisis estadístico, visualización de datos, machine learning y deep-learning. Experiencia en modelado físico y programación en Python, Matlab y herramientas de visualización como Power BI.</p>
+
+              <div class="meta">
+                <div class="contact">
+                  <span>✉️ julianssvr@gmail.com</span>
+                  <span>📱 317-640-6113</span>
+                  <span>🔗 <a href="https://github.com/Emmaquantum" target="_blank" rel="noopener" style="color:var(--muted)">github.com/Emmaquantum</a></span>
+                </div>
+                <div class="tags">
+                  <span class="tag">Python</span>
+                  <span class="tag">Matlab</span>
+                  <span class="tag">Machine Learning</span>
+                  <span class="tag">Visualización</span>
+                  <span class="tag">WebGL / Three.js</span>
+                </div>
+              </div>
+
+              <div style="margin-top:18px;display:flex;gap:12px">
+                <div class="quantum-btn" id="downloadWrap" style="flex-shrink:0">
+                  <button id="downloadBtn" class="btn">Descargar CV (PDF)</button>
+                  <div class="quantum-glow" id="downloadGlow"></div>
+                </div>
+                <button id="contactBtn" class="btn">Contactar</button>
+              </div>
+
+            </div>
+
+            <!-- THIS CARD CONTAINS the threeWrap where the 3D figure will render -->
+            <div class="card" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px);">
+              <div class="three-viewport" id="threeWrap">
+                <!-- Three.js canvas target -->
+                <canvas id="threeCanvas" data-engine="three.js r152"></canvas>
+                <div class="parallax-dots"></div>
+                <div id="threeOverlay" style="position:absolute;inset:0;pointer-events:none"></div>
+              </div>
+              <p style="margin-top:12px;color:var(--muted);font-size:13px">Interacciones guiadas por scroll: morphing 3D, fractal mandelbrot y efectos cuánticos.</p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+          <div class="card">
+            <h3 class="section-title">Formación académica</h3>
+            <div class="row" style="display:flex;gap:18px">
+              <div class="col" style="flex:1">
+                <h4>Estudiante de maestría en matemáticas aplicadas</h4>
+                <p class="cv-text">Universidad Nacional de Colombia.
+Febrero, 2025 - Actualmente.</p>
+
+                <h4>Profesional en ingeniería física</h4>
+                <p class="cv-text">Universidad Nacional de Colombia.
+Junio, 2015 - Noviembre, 2022.</p>
+              </div>
+              <div class="col" style="flex:1">
+                <h4>Habilidades</h4>
+                <div class="tags" style="margin-top:6px">
+                  <span class="tag">Python</span>
+                  <span class="tag">Julia</span>
+                  <span class="tag">R</span>
+                  <span class="tag">Matlab</span>
+                  <span class="tag">SQL</span>
+                </div>
+                <h4 style="margin-top:14px">Visualización</h4>
+                <div class="tags">
+                  <span class="tag">Power BI</span>
+                  <span class="tag">Matplotlib</span>
+                  <span class="tag">Seaborn</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience">
+          <div class="card">
+            <h3 class="section-title">Experiencia laboral</h3>
+
+            <h4>Ingeniero auxiliar - calculista hidráulico</h4>
+            <p class="cv-text"><strong>Cesva S.A.S.</strong>
+Septiembre, 2023 - Marzo, 2024.
+Logros:
+• Realicé el diseño y simulación de sistemas de acueducto, alcantarillado y drenaje pluvial, asegurando la eficiencia hidráulica y el cumplimiento normativo.
+• Elaboré planos técnicos y memorias de cálculo detalladas que sustentaron con éxito la aprobación de proyectos hidráulicos en entornos urbanos.
+• Apliqué herramientas de simulación como EPANET, Python y MATLAB para modelar redes complejas, mejorando la precisión y reduciendo el tiempo de diseño.</p>
+
+            <h4>Asesor comercial técnico</h4>
+            <p class="cv-text"><strong>Techno Skills Engineering Services S.A.S.</strong>
+Septiembre, 2022 - Abril, 2023.
+Logros:
+• Brindé asesoría técnica efectiva a clientes y equipos científicos, resolviendo problemas operativos y mejorando la usabilidad de los equipos comercializados.
+• Elaboré cotizaciones técnico-comerciales alineadas con requerimientos específicos, lo que contribuyó a incrementar la tasa de cierre de ventas.
+• Impulsé la venta consultiva mediante presentaciones técnicas dirigidas a stakeholders, traduciendo las capacidades tecnológicas en valor agregado para el cliente.</p>
+
+            <h4>Docente de Matemáticas y Física (varias organizaciones)</h4>
+            <p class="cv-text">Ingenious S.A.S., Deming S.A.S. y Multipruebas S.A.S.
+Julio, 2021 - Actualmente.
+Logros:
+• Formé a más de 150 estudiantes de diversos niveles en matemáticas y física, adaptando metodologías según su nivel y necesidades.
+• Preparé exitosamente a estudiantes para las pruebas Saber 11 y el examen de admisión de la Universidad Nacional.</p>
+
+            <h4>Docente de Matemáticas y Física</h4>
+            <p class="cv-text"><strong>Limca S.A.S.</strong>
+Abril, 2024 - Noviembre, 2024.
+Logros:
+• Implementé estrategias didácticas activas, mejorando la participación y comprensión en aulas con diversos niveles académicos.
+• Acompañé procesos de formación integral como director de grupo, fortaleciendo la convivencia escolar y el acompañamiento socioemocional.</p>
+
+          </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+          <div class="card">
+            <h3 class="section-title">Experiencia académica & proyectos</h3>
+            <h4>Investigador académico — Proyecto de antorcha de plasma (MinCiencias)</h4>
+            <p class="cv-text">Septiembre, 2023.
+• Realicé una revisión sistemática del estado del arte en literatura científica y técnica.
+• Desarrollé un análisis de viabilidad técnica para la puesta en marcha de una antorcha de combustión, definiendo requerimientos de ejecución y condiciones óptimas de operación.</p>
+
+            <h4>Cursos y seminarios</h4>
+            <p class="cv-text">• Curso: "Ciencia de datos" — Coursera / Universidad de los Andes (En desarrollo).
+• Curso: "Machine Learning" — Coursera / DeepLearning.AI — Mayo, 2023.</p>
+
+            <h4>Idiomas</h4>
+            <p class="cv-text">Español: Nativo · Inglés: Intermedio (B1–B2)</p>
+
+          </div>
+        </section>
+
+      </main>
+
+      <footer>
+        <p>Hoja de vida interactiva · Diseño: estilo física cuántica · Julián Sierra Salamanca</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ---------- Scripts (CDN) ---------- -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simplex-noise@4.0.0/simplex-noise.min.js"></script>
+
+  <script>
+    // ------------------ GSAP init ------------------
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from('#introCard',{y:36,opacity:0,duration:1.0,ease:'power3.out'});
+    document.querySelectorAll('section').forEach((sec)=>{
+      gsap.from(sec.querySelectorAll('.card, h3, h4, p'),{y:30,opacity:0,duration:0.8,stagger:0.06,scrollTrigger:{trigger:sec,start:'top 85%'}});
+    });
+
+    // Button glow interaction
+    const downloadWrap = document.getElementById('downloadWrap');
+    const glow = document.getElementById('downloadGlow');
+    downloadWrap.addEventListener('mousemove', (e)=>{
+      const r = downloadWrap.getBoundingClientRect();
+      const x = ((e.clientX - r.left)/r.width)*100;
+      const y = ((e.clientY - r.top)/r.height)*100;
+      glow.style.setProperty('--x', x + '%');
+      glow.style.setProperty('--y', y + '%');
+      glow.style.opacity = 1;
+    });
+    downloadWrap.addEventListener('mouseleave', ()=>{glow.style.opacity = 0});
+    downloadWrap.addEventListener('mouseenter', ()=>{gsap.fromTo(downloadWrap,{scale:1},{scale:1.02,duration:0.6,repeat:1,yoyo:true,ease:'power1.inOut'})});
+    document.getElementById('contactBtn').addEventListener('click', ()=>{gsap.fromTo('#contactBtn',{y:-6},{y:0,duration:0.8,ease:'bounce.out'}); alert('Email: julianssvr@gmail.com — Tel: 317-640-6113');});
+
+    // ------------------ Three.js scene inside threeWrap ------------------
+    (function(){
+      const panel = document.getElementById('threeWrap');
+      const canvas = document.getElementById('threeCanvas');
+
+      // Renderer
+      const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x000000, 0); // transparent background
+
+      // Scene + Camera
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 100);
+      camera.position.set(0,0,3.6);
+
+      // Lights
+      const amb = new THREE.AmbientLight(0xffffff, 0.6); scene.add(amb);
+      const dir = new THREE.DirectionalLight(0xffffff, 0.9); dir.position.set(3,3,5); scene.add(dir);
+
+      // Geometry and material
+      const detail = window.innerWidth < 980 ? 3 : 5;
+      const geo = new THREE.IcosahedronGeometry(1.05, detail);
+      const basePos = new Float32Array(geo.attributes.position.array);
+
+      const mat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color().setHSL(0.6, 0.78, 0.52),
+        metalness: 0.25,
+        roughness: 0.35,
+        emissive: new THREE.Color(0x001b1b)
+      });
+
+      const mesh = new THREE.Mesh(geo, mat);
+      scene.add(mesh);
+
+      // Mandelbrot background plane (low cost shader)
+      const mandelUniforms = { u_time:{value:0}, u_zoom:{value:1.8}, u_offset:{value:new THREE.Vector2(-0.5,0)}, u_aspect:{value:1} };
+      const mandelVS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);}';
+      const mandelFS = `
+        precision highp float;
+        varying vec2 vUv;
+        uniform float u_time;
+        uniform float u_zoom;
+        uniform vec2 u_offset;
+        uniform float u_aspect;
+        vec3 palette(float t){ return vec3(0.5+0.5*cos(6.2831*(t+vec3(0.0,0.33,0.67)))); }
+        void main(){
+          vec2 uv = vUv - 0.5;
+          uv.x *= u_aspect;
+          vec2 c = uv * u_zoom + u_offset;
+          vec2 z = c;
+          int it = 0;
+          int maxI = 120;
+          for(int i=0;i<120;i++){
+            float x = (z.x*z.x - z.y*z.y) + c.x;
+            float y = (2.0*z.x*z.y) + c.y;
+            z = vec2(x,y);
+            if(dot(z,z) > 16.0){ it = i; break; }
+          }
+          float t = float(it)/float(maxI);
+          vec3 col = palette(t);
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+      const plane = new THREE.Mesh(new THREE.PlaneGeometry(4,2.4,1,1), new THREE.ShaderMaterial({uniforms:mandelUniforms,vertexShader:mandelVS,fragmentShader:mandelFS,transparent:true,opacity:0.95}));
+      plane.position.set(0,0,-1.6);
+      scene.add(plane);
+
+      // Ring subtle
+      const ringGeo = new THREE.TorusGeometry(1.6, 0.02, 12, 120);
+      const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({color:0xffffff, opacity:0.035, transparent:true}));
+      ring.rotation.x = Math.PI*0.35;
+      scene.add(ring);
+
+      // Noise
+      const simplex = new SimplexNoise();
+
+      // State mapped by scroll
+      const state = { hue: 0.55, rotX: 0, rotY: 0, wobble: 0.0 };
+
+      // Resize handling
+      function resize(){
+        const rect = panel.getBoundingClientRect();
+        const w = Math.max(100, Math.floor(rect.width));
+        const h = Math.max(100, Math.floor(rect.height));
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        mandelUniforms.u_aspect.value = w / h;
+      }
+      const ro = new ResizeObserver(resize); ro.observe(panel); resize();
+
+      // Animation loop
+      const clock = new THREE.Clock();
+      function animate(){
+        const t = clock.getElapsedTime();
+        mandelUniforms.u_time.value = t;
+
+        // deform geometry with 3D noise
+        const pos = geo.attributes.position;
+        for(let i=0;i<pos.count;i++){
+          const ix = i*3;
+          const bx = basePos[ix], by = basePos[ix+1], bz = basePos[ix+2];
+          // 3D simplex-like using the library
+          const n = simplex.noise3D(bx*1.4 + t*0.6, by*1.2 + t*0.7, bz*1.1 + t*0.5);
+          const disp = n * 0.06 * (1 + state.wobble);
+          pos.array[ix]   = bx + disp * (0.9 - Math.abs(by));
+          pos.array[ix+1] = by + disp * (0.9 - Math.abs(bx));
+          pos.array[ix+2] = bz + disp * 0.9;
+        }
+        pos.needsUpdate = true;
+
+        // rotation influenced by state + slight idle motion
+        mesh.rotation.x = 0.15 * Math.sin(t*0.6) + state.rotX;
+        mesh.rotation.y += 0.004 + state.rotY * 0.01;
+
+        // apply hue
+        mat.color.setHSL(state.hue % 1, 0.78, 0.52);
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+      animate();
+
+      // GSAP ScrollTrigger: map scroll progress to color/rotation/wobble
+      const proxy = { p: 0 };
+      gsap.to(proxy, {
+        p: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.7
+        },
+        onUpdate: () => {
+          const prog = proxy.p;
+          const hue = 0.05 + prog * 0.85; // rainbow sweep
+          const rx = Math.sin(prog * Math.PI * 2) * 0.12;
+          const ry = Math.cos(prog * Math.PI * 1.7) * 0.18;
+          const wob = Math.abs(Math.sin(prog * Math.PI * 2)) * 0.9;
+          gsap.to(state, { hue: hue, rotX: rx, rotY: ry, wobble: wob, duration: 0.6, ease: 'power2.out' });
+        }
+      });
+
+      // subtle panel micro-parallax
+      gsap.to('#threeWrap', { y: -20, scrollTrigger:{ trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 } });
+
+      // cleanup for SPA
+      window.addEventListener('unload', ()=>{ ro.disconnect(); });
+
+    })();
+
+  </script>
+</body>
+</html>
